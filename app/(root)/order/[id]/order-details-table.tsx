@@ -16,16 +16,16 @@ import { Button } from "@/components/ui/button";
 const OrderDetailsTable = ({order,paypalClientId,isAdmin}:{order:Order,paypalClientId:string;isAdmin:boolean}) => {
     const {
         shippingAddress,
-        orderitems,
+          orderitems,
         itemsPrice,
         taxPrice,
         shippingPrice,
         totalPrice,
         paymentMethod,
-        isPaid,
-        paidAt,
-        isDelivered,
-        deliveredAt,
+         isPaid,
+         paidAt,
+         isDelivered,
+         deliveredAt,
       } = order;
 
 const {toast}=useToast()

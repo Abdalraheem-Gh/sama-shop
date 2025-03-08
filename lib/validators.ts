@@ -81,21 +81,10 @@ export const paymentMethodSchema=z.object({
             })
 
 
-// Insert Order Schema
-export const insertOrderSchema = z.object({
-    userId: z.string().min(1, 'User is required'),
-    itemsPrice: currency,
-    shippingPrice: currency,
-    taxPrice: currency,
-    totalPrice: currency,
-    paymentMethod: z.string().refine((data) => PAYMENT_METHODS.includes(data), {
-    message: 'Invalid payment method',
-    }),
-    shippingAddress: shippingAddressSchema,
-  });
 
-  
   export const insertOrderItemSchema = z.object({
+    orderId: z.string(), // أضف هذا السطر
+
     productId: z.string(),
     slug: z.string(),
     image: z.string(),
@@ -103,6 +92,32 @@ export const insertOrderSchema = z.object({
     price: currency,
     qty: z.number(),
   });
+
+// Insert Order Schema
+// export const insertOrderSchema = z.object({
+//     userId: z.string().min(1, 'User is required'),
+//     itemsPrice: currency,
+//     shippingPrice: currency,
+//     taxPrice: currency,
+//     totalPrice: currency,
+//     paymentMethod: z.string().refine((data) => PAYMENT_METHODS.includes(data), {
+//     message: 'Invalid payment method',
+//     }),
+//     shippingAddress: shippingAddressSchema,
+//   });
+export const insertOrderSchema = z.object({
+    userId: z.string().min(1, 'User is required'),
+    itemsPrice: currency,
+    shippingPrice: currency,
+    taxPrice: currency,
+    totalPrice: currency,
+    paymentMethod: z.string().refine((data) => PAYMENT_METHODS.includes(data), {
+      message: 'Invalid payment method',
+    }),
+    shippingAddress: shippingAddressSchema,
+    orderitems: z.array(insertOrderItemSchema), // أضف هذا السطر
+  });
+  
 
 //Schema for the PayPal paymentResult 
 export const paymentResultSchema=z.object({
