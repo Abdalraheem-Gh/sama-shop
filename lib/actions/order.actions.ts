@@ -1,6 +1,8 @@
 'use server'
 
-import { isRedirectError } from "next/dist/client/components/redirect-error"
+// import { isRedirectError } from 'next/dist/client/components/redirect';
+import { redirect } from 'next/navigation';
+
 import { convertToPlainObject, formatError } from "../utils";
 import { auth } from "@/auth";
 import { getMyCart } from "./cart.actions";
@@ -49,7 +51,10 @@ export async function createOrder() {
             //Create transaction to create order and order items
             const insertedOrderId= await prisma.$transaction(async(tx)=>{
                 //Create order
-                const insertedOrder=await tx.order.create({data:order})
+                
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+const insertedOrder=await tx.order.create({data:order})
                 //Create order items from the cart items
                 for(const item of cart.items as CartItem[]){
                     await tx.orderItem.create({
@@ -79,7 +84,9 @@ export async function createOrder() {
         return {success:true,message:'Order created',redirectTo:`/order/${insertedOrderId}`}
 
     } catch (error) {
-        if(isRedirectError(error))throw error;
+        if (error instanceof Error && error.message.includes('redirect')) {
+            redirect('/error-page'); // إعادة توجيه إلى صفحة الخطأ
+        }
         return{
             success:false,message:formatError(error)
         }

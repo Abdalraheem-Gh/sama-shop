@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
+console.log(typeof useActionState);
 
 const CredentialsSignInForm = () => {
     const searchParams=useSearchParams();
