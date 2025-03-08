@@ -9,8 +9,12 @@ images:{
       port:'',
     }
   ]
-}
+},
+experimental: {
+  nodeMiddleware: true, // تفعيل دعم Node.js Runtime لـ Middleware
+} 
 };
+ 
 
-export default nextConfig;
+ export default nextConfig;
  

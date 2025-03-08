@@ -219,13 +219,15 @@ export async function getMyOrders({limit=PAGE_SIZE,page}:{limit?:number,page:num
     if(!session)throw new Error('User is not authorized');
 
     const data=await prisma.order.findMany({
+        // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
         where:{userId:session?.user?.id!},
         orderBy:{createdAt:'desc'},
         take:limit, //عدد العناصر التي تريد استرجاعها.
         skip:(page-1)*limit//عدد العناصر التي تريد تخطيها قبل البدء في الاسترجاع.
     });
     const dataCount=await prisma.order.count({
-        where:{userId:session?.user?.id!}
+        // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+where:{userId:session?.user?.id!}
     });
     return{
         data,
