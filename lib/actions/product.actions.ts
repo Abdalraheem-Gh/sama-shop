@@ -1,33 +1,35 @@
-'use server'
-import { prisma } from "@/db/prisma";
-import { convertToPlainObject, formatError } from "../utils";
-import { LATEST_PRODUCTS_LIMIT, PAGE_SIZE } from "../constants";
-import { revalidatePath } from "next/cache";
-import { insertProductSchema, updateProductSchema } from "../validators";
-import { z } from "zod";
-import { Prisma } from "@prisma/client";
+'use server';
+import { prisma } from '@/db/prisma';
+import { convertToPlainObject, formatError } from '../utils';
+import { LATEST_PRODUCTS_LIMIT, PAGE_SIZE } from '../constants';
+import { revalidatePath } from 'next/cache';
+import { insertProductSchema, updateProductSchema } from '../validators';
+import { z } from 'zod';
+import { Prisma } from '@prisma/client';
 
-//Get latest products
+// Get latest products
 export async function getLatestProducts() {
+  const data = await prisma.product.findMany({
+    take: LATEST_PRODUCTS_LIMIT,
+    orderBy: { createdAt: 'desc' },
+  });
 
-    const data=await prisma.product.findMany({
-        take:LATEST_PRODUCTS_LIMIT,
-        orderBy:{createdAt:"desc"}
-    });
-    return convertToPlainObject(data);
+  return convertToPlainObject(data);
 }
 
-//Get single product by it's slug
-export async function getProductBySlug(slug:string) {
-    return await prisma.product.findFirst({
-        where:{slug:slug}
-    })
+// Get single product by it's slug
+export async function getProductBySlug(slug: string) {
+  return await prisma.product.findFirst({
+    where: { slug: slug },
+  });
 }
-//Get single product by it's ID
-export async function getProductById(productId:string) {
-  const data= await prisma.product.findFirst({
-      where:{id:productId}
-  })
+
+// Get single product by it's ID
+export async function getProductById(productId: string) {
+  const data = await prisma.product.findFirst({
+    where: { id: productId },
+  });
+
   return convertToPlainObject(data);
 }
 
@@ -103,26 +105,18 @@ export async function getAllProducts({
     take: limit,
   });
 
-  // const dataCount = await prisma.product.count();
-  const dataCount = await prisma.product.count({
-    where: { // ✅ تطبيق نفس الفلاتر
-      ...queryFilter,
-      ...categoryFilter,
-      ...priceFilter,
-      ...ratingFilter,
-    },
-  });
+  const dataCount = await prisma.product.count();
+
   return {
     data,
     totalPages: Math.ceil(dataCount / limit),
   };
 }
 
-
-// Delete Product
+// Delete a product
 export async function deleteProduct(id: string) {
   try {
-    const productExists = await prisma.product.findUnique({
+    const productExists = await prisma.product.findFirst({
       where: { id },
     });
 
@@ -141,10 +135,9 @@ export async function deleteProduct(id: string) {
   }
 }
 
-// Create Product
+// Create a product
 export async function createProduct(data: z.infer<typeof insertProductSchema>) {
   try {
-    // Validate and create product
     const product = insertProductSchema.parse(data);
     await prisma.product.create({ data: product });
 
@@ -159,27 +152,27 @@ export async function createProduct(data: z.infer<typeof insertProductSchema>) {
   }
 }
 
-// Update Product
+// Update a product
 export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
   try {
-    // Validate and create product
     const product = updateProductSchema.parse(data);
-    const productExists=await prisma.product.findFirst({
-      where:{id:product.id}
-    })
+    const productExists = await prisma.product.findFirst({
+      where: { id: product.id },
+    });
 
-    if(!productExists)throw new Error('Product not found');
+    if (!productExists) throw new Error('Product not found');
+
     await prisma.product.update({
-      where:{id:product.id},
-      data:product
-    })
+      where: { id: product.id },
+      data: product,
+    });
+
     revalidatePath('/admin/products');
 
     return {
       success: true,
       message: 'Product updated successfully',
     };
-
   } catch (error) {
     return { success: false, message: formatError(error) };
   }
@@ -187,11 +180,11 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
 
 // Get all categories
 export async function getAllCategories() {
-  const data=await prisma.product.groupBy({
-    by:['category'],
-    _count:true
+  const data = await prisma.product.groupBy({
+    by: ['category'],
+    _count: true,
   });
-  
+
   return data;
 }
 

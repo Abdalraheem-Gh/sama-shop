@@ -1,6 +1,3 @@
--- DropForeignKey
-ALTER TABLE "Cart" DROP CONSTRAINT "cart_userId_user_id_fk";
-
 -- CreateTable
 CREATE TABLE "Order" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
@@ -14,7 +11,7 @@ CREATE TABLE "Order" (
     "totalPrice" DECIMAL(12,2) NOT NULL,
     "isPaid" BOOLEAN NOT NULL DEFAULT false,
     "paidAt" TIMESTAMP(6),
-    "isDeliverd" BOOLEAN NOT NULL DEFAULT false,
+    "isDelivered" BOOLEAN NOT NULL DEFAULT false,
     "deliveredAt" TIMESTAMP(6),
     "createdAt" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -33,9 +30,6 @@ CREATE TABLE "OrderItem" (
 
     CONSTRAINT "orderitems_orderId_productId_pk" PRIMARY KEY ("orderId","productId")
 );
-
--- AddForeignKey
-ALTER TABLE "Cart" ADD CONSTRAINT "Cart_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Order" ADD CONSTRAINT "Order_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

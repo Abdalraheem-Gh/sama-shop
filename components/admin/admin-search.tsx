@@ -1,16 +1,16 @@
 'use client';
- import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { usePathname } from 'next/navigation';
-import { Input } from '@/components/ui/input';
+
+import { useState, useEffect } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { Input } from '../ui/input';
 
 const AdminSearch = () => {
   const pathname = usePathname();
   const formActionUrl = pathname.includes('/admin/orders')
     ? '/admin/orders'
     : pathname.includes('/admin/users')
-    ? '/admin/users'
-    : '/admin/products';
+      ? '/admin/users'
+      : '/admin/products';
 
   const searchParams = useSearchParams();
   const [queryValue, setQueryValue] = useState(searchParams.get('query') || '');
@@ -29,7 +29,7 @@ const AdminSearch = () => {
         onChange={(e) => setQueryValue(e.target.value)}
         className='md:w-[100px] lg:w-[300px]'
       />
-      <button type='submit' className='sr-only'>
+      <button className='sr-only' type='submit'>
         Search
       </button>
     </form>

@@ -1,51 +1,69 @@
-'use client'
-import { useEffect, useState } from "react";
-import { useTheme } from "next-themes";
-import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuTrigger,DropdownMenuLabel,DropdownMenuSeparator,DropdownMenuContent, DropdownMenuCheckboxItem } from "@/components/ui/dropdown-menu";
-import { MoonIcon, SunIcon, SunMoon } from "lucide-react";
-
+'use client';
+import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuContent,
+  DropdownMenuCheckboxItem,
+} from '@/components/ui/dropdown-menu';
+import { useTheme } from 'next-themes';
+import { SunIcon, MoonIcon, SunMoon } from 'lucide-react';
 
 const ModeToggle = () => {
-    const [mounted,setMounted]=useState(false)
-    const {theme,setTheme}=useTheme()
+  const [mounted, setMounted] = useState(false);
+  const { theme, setTheme } = useTheme();
 
-useEffect(()=>{
-    setMounted(true)
-},[])
-if(!mounted){return null}
-    return ( 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
+
+  return (
     <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-            <Button variant='ghost' 
-            className="focus-visible:ring-0 focus-visible:ring-offset-0">
-                {
-                    theme==='system'?<SunMoon/>:theme==='dark'?<MoonIcon/>:<SunIcon/>
-                }
-                </Button>
-        </DropdownMenuTrigger>
-
-        <DropdownMenuContent>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant='ghost'
+          className='focus-visible:ring-0 focus-visible:ring-offset-0'
+        >
+          {theme === 'system' ? (
+            <SunMoon />
+          ) : theme === 'dark' ? (
+            <MoonIcon />
+          ) : (
+            <SunIcon />
+          )}
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
         <DropdownMenuLabel>Appearance</DropdownMenuLabel>
-        <DropdownMenuSeparator/>
-        <DropdownMenuCheckboxItem checked={theme==='system'}
-                                    onClick={()=>setTheme('system')}
+        <DropdownMenuSeparator />
+        <DropdownMenuCheckboxItem
+          checked={theme === 'system'}
+          onClick={() => setTheme('system')}
         >
-            System
+          System
         </DropdownMenuCheckboxItem>
-        <DropdownMenuCheckboxItem checked={theme==='dark'}
-                                    onClick={()=>setTheme('dark')}
+        <DropdownMenuCheckboxItem
+          checked={theme === 'dark'}
+          onClick={() => setTheme('dark')}
         >
-            Dark
+          Dark
         </DropdownMenuCheckboxItem>
-        <DropdownMenuCheckboxItem checked={theme==='light'}
-                                    onClick={()=>setTheme('light')}
+        <DropdownMenuCheckboxItem
+          checked={theme === 'light'}
+          onClick={() => setTheme('light')}
         >
-            Light
+          Light
         </DropdownMenuCheckboxItem>
-        </DropdownMenuContent>
-                
-    </DropdownMenu> );
-}
- 
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
 export default ModeToggle;
