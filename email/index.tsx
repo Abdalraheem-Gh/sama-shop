@@ -7,8 +7,7 @@ dotenv.config();
 import PurchaseReceiptEmail from './purchase-receipt';
 
 const resend = new Resend(process.env.RESEND_API_KEY as string);
-console.log('API Key:', process.env.RESEND_API_KEY);
-
+ 
 export const sendPurchaseReceipt = async ({ order }: { order: Order }) => {
   await resend.emails.send({
     from: `${APP_NAME} <${SENDER_EMAIL}>`,
